@@ -19,12 +19,16 @@ def get_api(route):
         )
         if route_mapping:
             route_mapping = dict(route_mapping)
-        resp = []
-        if request.method == "GET":
-            resp = session.get(
-                route_mapping['destination'], headers=request.headers, data=request.data)
-        elif request.method == "POST":
-            resp = session.post(route_mapping['destination'], data=request.data, json=request.get_json())
+        resp = session.request(
+            method=request.method,
+            url=route_mapping['destination'],
+            params=request.args,
+            headers=request.headers,
+            data=request.data,
+            cookies=request.cookies,
+            files=request.files,
+            json=request.get_json()
+        )
         print(f"Mapping: {route} ---> {route_mapping['destination']}")
         return make_response(resp.content, resp.status_code)
     except:
