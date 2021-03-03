@@ -1,5 +1,5 @@
 import os
-
+from flask import request
 from flask import Flask
 
 
@@ -30,6 +30,10 @@ def create_app(test_config=None):
     from flaskr import db
 
     db.init_app(app)
+
+    @app.before_request
+    def before_request_func():
+        print(request.remote_addr)
 
     # apply the blueprints to the app
     from flaskr import auth, blog
